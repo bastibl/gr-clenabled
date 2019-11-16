@@ -85,7 +85,7 @@ ENDIF()
 ########################################################################
 # Install directories
 ########################################################################
-find_package(Gnuradio "3.8" REQUIRED)
+find_package(Gnuradio "3.9" REQUIRED)
 include(GrVersion)
 
 include(GrPlatform) #define LIB_SUFFIX
@@ -132,10 +132,10 @@ endif()
 ########################################################################
 # Find clFFT build dependencies
 ########################################################################
-find_package(clFFT)
-if(NOT CLFFT_FOUND)
-	message(FATAL_ERROR "clFFT is required to compile gr-clenabled")
-endif()
+# find_package(clFFT)
+# if(NOT CLFFT_FOUND)
+# 	message(FATAL_ERROR "clFFT is required to compile gr-clenabled")
+# endif()
 
 ########################################################################
 # Find gnuradio build dependencies

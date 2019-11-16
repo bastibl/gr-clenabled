@@ -23,6 +23,8 @@
 ########################################################################
 include(GrPlatform) #define LIB_SUFFIX
 
+add_definitions(-DCL_TARGET_OPENCL_VERSION=200)
+
 include_directories(${Boost_INCLUDE_DIR} ${OpenCL_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
 link_directories(${FFTW3F_LIBRARY_DIRS})
@@ -33,13 +35,13 @@ list(APPEND clenabled_sources
     clMathOp_impl.cc
     firdes.cc
     window.cc
-    fft_filter.cc
-    fir_filter.cc
-    fft.cc
-    clFilter_impl.cc
+    # fft_filter.cc
+    # fir_filter.cc
+    # fft.cc
+    # clFilter_impl.cc
     clQuadratureDemod_impl.cc
     fast_atan2f.cc
-    clFFT_impl.cc
+    # clFFT_impl.cc
     clLog_impl.cc
     clSNR_impl.cc
     clComplexToArg_impl.cc
@@ -50,7 +52,7 @@ list(APPEND clenabled_sources
     clKernel2To1_impl.cc
     clSignalSource_impl.cc
     clCostasLoop_impl.cc
-    clComplexFilter_impl.cc
+    # clComplexFilter_impl.cc
 )
 
 set(clenabled_sources "${clenabled_sources}" PARENT_SCOPE)
@@ -89,144 +91,144 @@ endif(APPLE)
 include(GrMiscUtils)
 GR_LIBRARY_FOO(gnuradio-clenabled)
 
-########################################################################
-# Build and register clview
-########################################################################
-add_executable(clview clview.cc)
+# ########################################################################
+# # Build and register clview
+# ########################################################################
+# add_executable(clview clview.cc)
 
-target_link_libraries(
-  clview
-  OpenCL
-)
+# target_link_libraries(
+#   clview
+#   OpenCL
+# )
 
-install(TARGETS clview DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" RUNTIME)
+# install(TARGETS clview DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" RUNTIME)
 
-########################################################################
-# Build and register test-clkernel
-########################################################################
-list(APPEND test_clkernel_sources
-    ${CMAKE_CURRENT_SOURCE_DIR}/test-clkernel.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/GRCLBase.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/clKernel1To1_impl.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/clKernel2To1_impl.cc
-)
+# ########################################################################
+# # Build and register test-clkernel
+# ########################################################################
+# list(APPEND test_clkernel_sources
+#     ${CMAKE_CURRENT_SOURCE_DIR}/test-clkernel.cc
+#     ${CMAKE_CURRENT_SOURCE_DIR}/GRCLBase.cpp
+#     ${CMAKE_CURRENT_SOURCE_DIR}/clKernel1To1_impl.cc
+#     ${CMAKE_CURRENT_SOURCE_DIR}/clKernel2To1_impl.cc
+# )
 
-add_executable(test-clkernel ${test_clkernel_sources})
-
-
-target_link_libraries(
-  test-clkernel
-  ${OpenCL_LIBRARY}
-  ${GNURADIO_RUNTIME_LIBRARIES}
-  ${Boost_LIBRARIES}
-  gnuradio-clenabled
-)
-
-target_include_directories(test-clkernel
-    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
-    PUBLIC $<INSTALL_INTERFACE:include>
-  )
-
-install(TARGETS test-clkernel DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" RUNTIME)
-
-########################################################################
-# Build and register test-clenabled
-########################################################################
-list(APPEND test_clenabled_sources
-    ${CMAKE_CURRENT_SOURCE_DIR}/test_clenabled.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/clMathOp_impl.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/clMathConst_impl.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/GRCLBase.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/clFilter_impl.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/clQuadratureDemod_impl.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/clFFT_impl.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/clLog_impl.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/clSNR_impl.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/clComplexToMag_impl.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/clComplexToArg_impl.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/clComplexToMagPhase_impl.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/clMagPhaseToComplex_impl.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/clSignalSource_impl.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/clCostasLoop_impl.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/fft_filter.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/fir_filter.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/firdes.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/window.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/firdes.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/fast_atan2f.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/fft.cc
-)
-
-add_executable(test-clenabled ${test_clenabled_sources})
-
-target_link_libraries(
-  test-clenabled
-  gnuradio::gnuradio-runtime
-  ${Boost_LIBRARIES}
-  ${VOLK_LIBRARIES}
-  fftw3f
-  ${OpenCL_LIBRARY}
-  ${CLFFT_LIBRARIES}
-  gnuradio-blocks
-  gnuradio-filter
-  gnuradio-fft
-)
-
-target_include_directories(test-clenabled
-    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
-    PUBLIC $<INSTALL_INTERFACE:include>
-  )
-
-install(TARGETS test-clenabled DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" RUNTIME)
-
-########################################################################
-# Build and register test-clfilter
-########################################################################
-list(APPEND test_clfilter_sources
-    ${CMAKE_CURRENT_SOURCE_DIR}/test-clfilter.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/clFilter_impl.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/clComplexFilter_impl.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/GRCLBase.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/window.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/fir_filter.cc
-)
-
-add_executable(test-clfilter ${test_clfilter_sources})
-
-target_link_libraries(
-  test-clfilter
-  ${OpenCL_LIBRARY}
-  ${GNURADIO_RUNTIME_LIBRARIES}
-  gnuradio-filter
-  ${Boost_LIBRARIES}
-  gnuradio-clenabled
-)
-
-install(TARGETS test-clfilter DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" RUNTIME)
-
-########################################################################
-# Build and register test-clenabled-fft
-########################################################################
-list(APPEND test_clsingle_sources
-    ${CMAKE_CURRENT_SOURCE_DIR}/test-clenabled-fft.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/clFFT_impl.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/GRCLBase.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/window.cc
-)
-
-add_executable(test-clenabled-fft ${test_clsingle_sources})
+# add_executable(test-clkernel ${test_clkernel_sources})
 
 
-target_link_libraries(
-  test-clenabled-fft
-  ${OpenCL_LIBRARY}
-  ${GNURADIO_RUNTIME_LIBRARIES}
-  ${Boost_LIBRARIES}
-  gnuradio-clenabled
-)
-########################################################################
-# Print summary
-########################################################################
-message(STATUS "Using install prefix: ${CMAKE_INSTALL_PREFIX}")
-message(STATUS "Building for version: ${VERSION} / ${LIBVER}")
+# target_link_libraries(
+#   test-clkernel
+#   ${OpenCL_LIBRARY}
+#   ${GNURADIO_RUNTIME_LIBRARIES}
+#   ${Boost_LIBRARIES}
+#   gnuradio-clenabled
+# )
+
+# target_include_directories(test-clkernel
+#     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
+#     PUBLIC $<INSTALL_INTERFACE:include>
+#   )
+
+# install(TARGETS test-clkernel DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" RUNTIME)
+
+# ########################################################################
+# # Build and register test-clenabled
+# ########################################################################
+# list(APPEND test_clenabled_sources
+#     ${CMAKE_CURRENT_SOURCE_DIR}/test_clenabled.cc
+#     ${CMAKE_CURRENT_SOURCE_DIR}/clMathOp_impl.cc
+#     ${CMAKE_CURRENT_SOURCE_DIR}/clMathConst_impl.cc
+#     ${CMAKE_CURRENT_SOURCE_DIR}/GRCLBase.cpp
+#     ${CMAKE_CURRENT_SOURCE_DIR}/clFilter_impl.cc
+#     ${CMAKE_CURRENT_SOURCE_DIR}/clQuadratureDemod_impl.cc
+#     ${CMAKE_CURRENT_SOURCE_DIR}/clFFT_impl.cc
+#     ${CMAKE_CURRENT_SOURCE_DIR}/clLog_impl.cc
+#     ${CMAKE_CURRENT_SOURCE_DIR}/clSNR_impl.cc
+#     ${CMAKE_CURRENT_SOURCE_DIR}/clComplexToMag_impl.cc
+#     ${CMAKE_CURRENT_SOURCE_DIR}/clComplexToArg_impl.cc
+#     ${CMAKE_CURRENT_SOURCE_DIR}/clComplexToMagPhase_impl.cc
+#     ${CMAKE_CURRENT_SOURCE_DIR}/clMagPhaseToComplex_impl.cc
+#     ${CMAKE_CURRENT_SOURCE_DIR}/clSignalSource_impl.cc
+#     ${CMAKE_CURRENT_SOURCE_DIR}/clCostasLoop_impl.cc
+#     ${CMAKE_CURRENT_SOURCE_DIR}/fft_filter.cc
+#     ${CMAKE_CURRENT_SOURCE_DIR}/fir_filter.cc
+#     ${CMAKE_CURRENT_SOURCE_DIR}/firdes.cc
+#     ${CMAKE_CURRENT_SOURCE_DIR}/window.cc
+#     ${CMAKE_CURRENT_SOURCE_DIR}/firdes.cc
+#     ${CMAKE_CURRENT_SOURCE_DIR}/fast_atan2f.cc
+#     ${CMAKE_CURRENT_SOURCE_DIR}/fft.cc
+# )
+
+# add_executable(test-clenabled ${test_clenabled_sources})
+
+# target_link_libraries(
+#   test-clenabled
+#   gnuradio::gnuradio-runtime
+#   ${Boost_LIBRARIES}
+#   ${VOLK_LIBRARIES}
+#   fftw3f
+#   ${OpenCL_LIBRARY}
+#   ${CLFFT_LIBRARIES}
+#   gnuradio-blocks
+#   gnuradio-filter
+#   gnuradio-fft
+# )
+
+# target_include_directories(test-clenabled
+#     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
+#     PUBLIC $<INSTALL_INTERFACE:include>
+#   )
+
+# install(TARGETS test-clenabled DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" RUNTIME)
+
+# ########################################################################
+# # Build and register test-clfilter
+# ########################################################################
+# # list(APPEND test_clfilter_sources
+# #     ${CMAKE_CURRENT_SOURCE_DIR}/test-clfilter.cc
+# #     ${CMAKE_CURRENT_SOURCE_DIR}/clFilter_impl.cc
+# #     ${CMAKE_CURRENT_SOURCE_DIR}/clComplexFilter_impl.cc
+# #     ${CMAKE_CURRENT_SOURCE_DIR}/GRCLBase.cpp
+# #     ${CMAKE_CURRENT_SOURCE_DIR}/window.cc
+# #     ${CMAKE_CURRENT_SOURCE_DIR}/fir_filter.cc
+# # )
+
+# # add_executable(test-clfilter ${test_clfilter_sources})
+
+# # target_link_libraries(
+# #   test-clfilter
+# #   ${OpenCL_LIBRARY}
+# #   ${GNURADIO_RUNTIME_LIBRARIES}
+# #   gnuradio-filter
+# #   ${Boost_LIBRARIES}
+# #   gnuradio-clenabled
+# # )
+
+# # install(TARGETS test-clfilter DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" RUNTIME)
+
+# # ########################################################################
+# # # Build and register test-clenabled-fft
+# # ########################################################################
+# # list(APPEND test_clsingle_sources
+# #     ${CMAKE_CURRENT_SOURCE_DIR}/test-clenabled-fft.cc
+# #     ${CMAKE_CURRENT_SOURCE_DIR}/clFFT_impl.cc
+# #     ${CMAKE_CURRENT_SOURCE_DIR}/GRCLBase.cpp
+# #     ${CMAKE_CURRENT_SOURCE_DIR}/window.cc
+# # )
+
+# # add_executable(test-clenabled-fft ${test_clsingle_sources})
+
+
+# # target_link_libraries(
+# #   test-clenabled-fft
+# #   ${OpenCL_LIBRARY}
+# #   ${GNURADIO_RUNTIME_LIBRARIES}
+# #   ${Boost_LIBRARIES}
+# #   gnuradio-clenabled
+# # )
+# ########################################################################
+# # Print summary
+# ########################################################################
+# message(STATUS "Using install prefix: ${CMAKE_INSTALL_PREFIX}")
+# message(STATUS "Building for version: ${VERSION} / ${LIBVER}")
 
