@@ -64,15 +64,16 @@ endif(NOT clenabled_sources)
 add_library(gnuradio-clenabled SHARED ${clenabled_sources})
 target_link_libraries(gnuradio-clenabled 
 	gnuradio::gnuradio-runtime 
-	gnuradio-blocks 
-	gnuradio-fft
-	gnuradio-filter 
+	gnuradio::gnuradio-blocks
+	gnuradio::gnuradio-fft
+	gnuradio::gnuradio-filter
 	${Boost_LIBRARIES} 
 	${VOLK_LIBRARIES} 
 	fftw3f 
 	${OpenCL_LIBRARY} 
-	${CLFFT_LIBRARIES})
-	
+	${CLFFT_LIBRARIES}
+)
+
 target_include_directories(gnuradio-clenabled
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
     PUBLIC $<INSTALL_INTERFACE:include>
